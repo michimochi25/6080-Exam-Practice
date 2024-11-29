@@ -6,12 +6,31 @@ import p5 from "./assets/5.png";
 import p6 from "./assets/6.png";
 import p7 from "./assets/7.png";
 import p8 from "./assets/8.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import "./App.css";
 
 function App() {
-  const pics = [p1, p2, p3, p4, p5, p6, p7, p8];
+  const shuffle = (arr) => {
+    for (let i = 15; i > 0; i--) {
+      const j = Math.floor(Math.random() * 15);
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+
+    setCards((prev) => {
+      const updated = [...prev];
+      let count = 0;
+      for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+          updated[i][j] = pics[count];
+          count++;
+        }
+      }
+      return updated;
+    });
+  };
+
+  const pics = [p1, p2, p3, p4, p5, p6, p7, p8, p1, p2, p3, p4, p5, p6, p7, p8];
   const [cards, setCards] = useState([
     ["", "", "", ""],
     ["", "", "", ""],
@@ -19,20 +38,34 @@ function App() {
     ["", "", "", ""],
   ]);
 
+  useEffect(() => {
+    shuffle(pics);
+    console.log(pics);
+  }, []);
+
   return (
     <div className="w-screen h-screen flex flex-col gap-4 justify-center items-center">
       <div id="board" className="flex flex-col gap-2">
-        {cards.map((row) => {
+        {cards.map((row, rowKey) => {
           return (
             <div className="flex gap-2">
-              {row.map((col) => {
-                return <div className="w-[120px] h-[120px] bg-red-200"></div>;
+              {row.map((col, colKey) => {
+                return (
+                  <div className="w-[120px] h-[120px] bg-red-200 flex justify-center items-center">
+                    <img src={cards[rowKey][colKey]} className="h-full"></img>
+                  </div>
+                );
               })}
             </div>
           );
         })}
       </div>
-      <Button variant="contained" color="error" size="large">
+      <Button
+        variant="contained"
+        color="error"
+        size="large"
+        onClick={() => shuffle(pics)}
+      >
         Reset
       </Button>
     </div>
