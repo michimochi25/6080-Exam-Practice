@@ -1,5 +1,8 @@
 # Memory Game
 Description: Flip cards to match pairs.
+<br/>
+<br/>
+<img src="https://github.com/michimochi25/6080-Exam-Practice/blob/main/memory-game/public/Screenshot%202024-11-29%20144040.png" width="500px"/>
 
 Specs:
 - 4x4 board with 8 pairs of cards
