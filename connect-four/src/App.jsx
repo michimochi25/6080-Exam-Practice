@@ -55,11 +55,11 @@ function App() {
           r = 0;
           y++;
         }
-      }
-      if (r >= 4) {
-        setWinner("R");
-      } else if (y >= 4) {
-        setWinner("Y");
+        if (r >= 4) {
+          setWinner("R");
+        } else if (y >= 4) {
+          setWinner("Y");
+        }
       }
       r = 0;
       y = 0;
@@ -78,11 +78,11 @@ function App() {
           r = 0;
           y++;
         }
-      }
-      if (r >= 4) {
-        setWinner("R");
-      } else if (y >= 4) {
-        setWinner("Y");
+        if (r >= 4) {
+          setWinner("R");
+        } else if (y >= 4) {
+          setWinner("Y");
+        }
       }
 
       r = 0;
