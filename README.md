@@ -7,3 +7,4 @@ Why using JS? Because I'm too ceebs to use TS :>
 - Connect Four
 - Memory Game
 - Tic-Tac-Toe
+- Wordle
