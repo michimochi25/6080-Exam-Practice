@@ -3,5 +3,7 @@ Mini games I made to practice for COMP6080 final exam. BTW, ChatGPT helped me ge
 Why using JS? Because I'm too ceebs to use TS :>
 
 # Game list
-- Memory Game
+- 2048
 - Connect Four
+- Memory Game
+- Tic-Tac-Toe
