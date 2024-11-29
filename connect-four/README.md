@@ -9,6 +9,11 @@ Specs:
 - Create a `reset` button to reset the game
 - Player YELLOW starts first
 - When a column is clicked anywhere, the token appears at the non-empty bottom of it
+- If tokens of the same color form a horizontal or vertical line of four, that player wins
 - When a player wins, an `alert` pops up
 - When the alert is closed, the game is automatically reset
 
+Features to Add:
+- Diagonal win
+- Winning animation
+- Timer
