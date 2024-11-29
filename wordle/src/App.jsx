@@ -1,35 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import { useEffect } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const words = ["HIPPO", "TRUNK", "FRANK", "BRING", "MOVIE", "PLUCK", "STING"];
+  const [answer, setAnswer] = useState(null);
+  const [activeRow, setActiveRow] = useState(0);
+
+  useEffect(() => {
+    let r = words[Math.floor(Math.random() * 7)];
+    setAnswer(r);
+  }, []);
+
+  const [cells, setCells] = useState([
+    ["", "", "", "", ""],
+    ["", "", "", "", ""],
+    ["", "", "", "", ""],
+    ["", "", "", "", ""],
+    ["", "", "", "", ""],
+    ["", "", "", "", ""],
+  ]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.keyCode >= 65 && e.keyCode <= 90) {
+        // if a letter pressed
+        setCells((prev) => {
+          const updated = [...prev];
+          let i = 0;
+          for (let i = 0; i < 5; i++) {
+            if (!updated[activeRow][i]) {
+              updated[activeRow][i] = String.fromCharCode(e.keyCode);
+              break;
+            }
+          }
+          return updated;
+        });
+      } else if (e.keyCode === 8) {
+        setCells((prev) => {
+          const updated = [...prev];
+          for (let i = 4; i >= 0; i--) {
+            if (updated[activeRow][i]) {
+              updated[activeRow][i] = "";
+              break;
+            }
+          }
+          return updated;
+        });
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="w-screen h-screen flex flex-col justify-center items-center bg-gray-900">
+      <div id="board" className="flex flex-col w-[350px] items-center gap-2">
+        {cells.map((row, r) => {
+          return (
+            <div className="flex gap-2 bg-grey-200 ">
+              {row.map((col, c) => {
+                return (
+                  <div className="text-5xl font-bold w-[60px] h-[60px] border border-2 border-slate-400 text-white">
+                    {cells[r][c]}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
