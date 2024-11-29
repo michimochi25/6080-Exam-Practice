@@ -23,11 +23,11 @@ function App() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
+      console.log(activeRow);
       if (e.keyCode >= 65 && e.keyCode <= 90) {
         // if a letter pressed
         setCells((prev) => {
           const updated = [...prev];
-          let i = 0;
           for (let i = 0; i < 5; i++) {
             if (!updated[activeRow][i]) {
               updated[activeRow][i] = String.fromCharCode(e.keyCode);
@@ -47,6 +47,8 @@ function App() {
           }
           return updated;
         });
+      } else if (e.keyCode === 13 && cells[activeRow][4] && activeRow < 6) {
+        setActiveRow(activeRow + 1);
       }
     };
 
@@ -54,18 +56,18 @@ function App() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [activeRow]);
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center bg-gray-900">
       <div id="board" className="flex flex-col w-[350px] items-center gap-2">
-        {cells.map((row, r) => {
+        {cells.map((row) => {
           return (
             <div className="flex gap-2 bg-grey-200 ">
-              {row.map((col, c) => {
+              {row.map((col) => {
                 return (
                   <div className="text-5xl font-bold w-[60px] h-[60px] border border-2 border-slate-400 text-white">
-                    {cells[r][c]}
+                    {col}
                   </div>
                 );
               })}
