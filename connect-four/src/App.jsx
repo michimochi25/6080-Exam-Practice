@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Button from "@mui/material/Button";
 import "./App.css";
 
 // yellow = 0
@@ -13,6 +14,7 @@ function App() {
     ["", "", "", "", "", ""],
   ]);
 
+  const [winner, setWinner] = useState(null);
   const [turn, setTurn] = useState(0);
   const handleClick = (col) => {
     if (board[0][col]) {
@@ -41,8 +43,78 @@ function App() {
     return "flex rounded-full bg-slate-400 w-[70px] h-[70px]";
   };
 
+  const checkRow = () => {
+    let r = 0;
+    let y = 0;
+    for (let row = 0; row < 5; row++) {
+      for (let i = 0; i < 6; i++) {
+        if (board[row][i] === "R") {
+          r++;
+        } else if (board[row][i] === "Y") {
+          y++;
+        }
+      }
+      if (r >= 4) {
+        setWinner("R");
+      } else if (y >= 4) {
+        setWinner("Y");
+      }
+      r = 0;
+      y = 0;
+    }
+  };
+
+  const checkCol = () => {
+    let r = 0;
+    let y = 0;
+    for (let col = 0; col < 6; col++) {
+      for (let i = 0; i < 5; i++) {
+        if (board[i][col] === "R") {
+          r++;
+        } else if (board[i][col] === "Y") {
+          y++;
+        }
+      }
+      if (r >= 4) {
+        setWinner("R");
+      } else if (y >= 4) {
+        setWinner("Y");
+      }
+
+      r = 0;
+      y = 0;
+    }
+  };
+
+  useEffect(() => {
+    checkRow();
+    checkCol();
+    console.log("Winner: ", winner);
+  }, [board]);
+
+  useEffect(() => {
+    if (winner == null) return;
+    alert(`${winner === "R" ? "Red" : "Yellow"} wins`);
+    reset();
+  }, [winner]);
+
+  const reset = () => {
+    setBoard([
+      ["", "", "", "", "", ""],
+      ["", "", "", "", "", ""],
+      ["", "", "", "", "", ""],
+      ["", "", "", "", "", ""],
+      ["", "", "", "", "", ""],
+    ]);
+    setWinner(null);
+    setTurn(0);
+  };
+
   return (
-    <div className="w-screen h-screen flex justify-center items-center bg-slate-100">
+    <div className="w-screen h-screen flex flex-col gap-3 justify-center items-center bg-slate-100">
+      <Button variant="contained" color="error" onClick={reset}>
+        Reset
+      </Button>
       <div className="flex flex-col p-5 justify-center items-center gap-2 rounded-xl bg-slate-300">
         {board.map((row) => {
           return (
