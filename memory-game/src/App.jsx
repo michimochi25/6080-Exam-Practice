@@ -31,7 +31,10 @@ function App() {
   };
 
   const pics = [p1, p2, p3, p4, p5, p6, p7, p8, p1, p2, p3, p4, p5, p6, p7, p8];
+  const [score, setScore] = useState(0);
+  const [combo, setCombo] = useState(1);
   const [chosen, setChosen] = useState([]);
+  const [correct, setCorrect] = useState([]);
   const [cards, setCards] = useState([
     ["", "", "", ""],
     ["", "", "", ""],
@@ -44,7 +47,11 @@ function App() {
   }, []);
 
   const handleClick = (row, col) => {
-    if (chosen.length === 2) return;
+    if (
+      chosen.length === 2 ||
+      correct.find((c) => c[0] === row && c[1] === col)
+    )
+      return;
     setChosen((prev) => {
       const updated = [...prev];
       updated.push([row, col]);
@@ -52,8 +59,48 @@ function App() {
     });
   };
 
+  const reset = () => {
+    shuffle(pics);
+    setChosen([]);
+    setCorrect([]);
+    setScore(0);
+    setCombo(1);
+  };
+
+  useEffect(() => {
+    if (chosen.length === 2) {
+      const pic1 = chosen[0];
+      const pic2 = chosen[1];
+      if (cards[pic1[0]][pic1[1]] === cards[pic2[0]][pic2[1]]) {
+        setTimeout(() => {
+          alert("Correct!");
+        }, 0);
+        setCorrect((prev) => {
+          const updated = [...prev];
+          updated.push(pic1);
+          updated.push(pic2);
+          return updated;
+        });
+        setChosen([]);
+        setScore((score + 20) * combo);
+        setCombo(combo + 1);
+      } else {
+        setCombo(1);
+        setTimeout(() => {
+          setChosen([]);
+        }, 1000);
+      }
+    }
+  }, [chosen]);
+
   return (
     <div className="w-screen h-screen flex flex-col gap-4 justify-center items-center">
+      <div className="flex w-[500px] justify-between">
+        <p className="text-3xl font-bold">Score: {score}</p>
+        <Button variant="contained" color="error" size="large" onClick={reset}>
+          Reset
+        </Button>
+      </div>
       <div id="board" className="flex flex-col gap-2">
         {cards.map((row, rowKey) => {
           return (
@@ -64,9 +111,12 @@ function App() {
                     className="w-[120px] h-[120px] bg-red-200 flex justify-center items-center cursor-pointer"
                     onClick={() => handleClick(rowKey, colKey)}
                   >
-                    {chosen.find(
+                    {(correct.find(
                       (coord) => coord[0] === rowKey && coord[1] === colKey
-                    ) && (
+                    ) ||
+                      chosen.find(
+                        (coord) => coord[0] === rowKey && coord[1] === colKey
+                      )) && (
                       <img src={cards[rowKey][colKey]} className="h-full"></img>
                     )}
                   </div>
@@ -76,14 +126,6 @@ function App() {
           );
         })}
       </div>
-      <Button
-        variant="contained"
-        color="error"
-        size="large"
-        onClick={() => shuffle(pics)}
-      >
-        Reset
-      </Button>
     </div>
   );
 }
