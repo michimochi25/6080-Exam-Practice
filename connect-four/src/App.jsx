@@ -49,8 +49,10 @@ function App() {
     for (let row = 0; row < 5; row++) {
       for (let i = 0; i < 6; i++) {
         if (board[row][i] === "R") {
+          y = 0;
           r++;
         } else if (board[row][i] === "Y") {
+          r = 0;
           y++;
         }
       }
@@ -70,8 +72,10 @@ function App() {
     for (let col = 0; col < 6; col++) {
       for (let i = 0; i < 5; i++) {
         if (board[i][col] === "R") {
+          y = 0;
           r++;
         } else if (board[i][col] === "Y") {
+          r = 0;
           y++;
         }
       }
