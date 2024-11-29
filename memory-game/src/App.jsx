@@ -31,6 +31,7 @@ function App() {
   };
 
   const pics = [p1, p2, p3, p4, p5, p6, p7, p8, p1, p2, p3, p4, p5, p6, p7, p8];
+  const [chosen, setChosen] = useState([]);
   const [cards, setCards] = useState([
     ["", "", "", ""],
     ["", "", "", ""],
@@ -40,8 +41,16 @@ function App() {
 
   useEffect(() => {
     shuffle(pics);
-    console.log(pics);
   }, []);
+
+  const handleClick = (row, col) => {
+    if (chosen.length === 2) return;
+    setChosen((prev) => {
+      const updated = [...prev];
+      updated.push([row, col]);
+      return updated;
+    });
+  };
 
   return (
     <div className="w-screen h-screen flex flex-col gap-4 justify-center items-center">
@@ -51,8 +60,15 @@ function App() {
             <div className="flex gap-2">
               {row.map((col, colKey) => {
                 return (
-                  <div className="w-[120px] h-[120px] bg-red-200 flex justify-center items-center">
-                    <img src={cards[rowKey][colKey]} className="h-full"></img>
+                  <div
+                    className="w-[120px] h-[120px] bg-red-200 flex justify-center items-center cursor-pointer"
+                    onClick={() => handleClick(rowKey, colKey)}
+                  >
+                    {chosen.find(
+                      (coord) => coord[0] === rowKey && coord[1] === colKey
+                    ) && (
+                      <img src={cards[rowKey][colKey]} className="h-full"></img>
+                    )}
                   </div>
                 );
               })}
